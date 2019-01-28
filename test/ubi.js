@@ -38,6 +38,10 @@ contract("ubi", ([owner, holder, nonHolder]) => {
     })
 
     describe("Collection period", () => {
+        it("switched to collection period", async () => {
+            expect(await this.ubi.period()).to.be.a.bignumber.that.equals(1)
+        })
+
         describe("Non token holder", () => {
             it("refuse call", async () => {
                 await shouldFail.reverting.withMessage(this.ubi.collect({ from: nonHolder }), "Not a token holder")
