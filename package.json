@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "openzeppelin-solidity": "2.1.2",
     "truffle": "^5.0.2"
   }
 }
