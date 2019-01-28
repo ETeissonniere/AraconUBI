@@ -53,6 +53,13 @@ contract("ubi", ([owner, holder, nonHolder]) => {
         })
 
         describe("Token holder", () => {
+            it("allows contract to take tokens", async () => {
+                await this.token.approve(
+                    this.ubi.address,
+                    await this.token.balanceOf(holder),
+                    { from: holder })
+            })
+
             it("calls collection function", async () => {
                 this.balanceBefore = await balance.current(holder)
                 await this.ubi.collect({ from: holder })
@@ -60,14 +67,19 @@ contract("ubi", ([owner, holder, nonHolder]) => {
             })
 
             it("sent the ETH", async () => {
-                expect(this.balanceAfter - this.balanceBefore).to.be.a.bignumber.that.is.not.zero
+                expect(this.balanceAfter.sub(this.balanceBefore)).to.be.a.bignumber.that.is.not.zero
 
                 // Holder has 100% shares
                 expect(await balance.current(this.ubi.address)).to.be.a.bignumber.that.is.zero
             })
 
-            it("burnt the tokens", async () => {
+            it("took the tokens", async () => {
                 expect(await this.token.balanceOf(holder)).to.be.a.bignumber.that.is.zero
+
+                // Instead of burning the tokens, we move them to the contract's address
+                // this has the cool effect that people can decide to give their reward back
+                // to others by sending their tokens to the said contract
+                expect(await this.token.balanceOf(this.ubi.address)).to.be.a.bignumber.that.equal(new BN(1000))
             })
         })
     })
