@@ -1,5 +1,5 @@
-const Ubi = artifacts.require("Ubi.sol")
-const UbiToken = artifacts.require("UbiToken.sol")
+var Ubi = artifacts.require("Ubi.sol")
+var UbiToken = artifacts.require("UbiToken.sol")
 
 // Change me as needed
 const endingBlock = 4242424242
