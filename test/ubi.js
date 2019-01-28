@@ -8,12 +8,16 @@ contract("ubi", ([owner, holder, nonHolder]) => {
             this.token = await UbiToken.new()
             await this.token.mint(holder, 1000)
 
-            this.startBlock = await time.latestBlock()
-            this.ubi = await Ubi.new(this.token.address, this.startBlock + 20)
+            this.endBlock = (await time.latestBlock()).add(new BN(20))
+            this.ubi = await Ubi.new(this.token.address, this.endBlock)
         })
 
         it("should start in contribution period", async () => {
             expect(await this.ubi.period()).to.be.a.bignumber.that.is.zero
+        })
+
+        it("configured period switching block", async () => {
+            expect(await this.ubi.endCollectionPeriod()).to.be.a.bignumber.that.is.equal(this.endBlock)
         })
     })
 
@@ -27,7 +31,7 @@ contract("ubi", ([owner, holder, nonHolder]) => {
         })
 
         it("advance time", async () => {
-            while ((await time.latestBlock()) < this.startBlock + 20) {
+            while ((await time.latestBlock()).lt(this.endBlock)) {
                 await time.advanceBlock()
             }
         })
