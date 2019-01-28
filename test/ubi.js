@@ -43,7 +43,7 @@ contract("ubi", ([owner, holder, nonHolder]) => {
 
     describe("Collection period", () => {
         it("switched to collection period", async () => {
-            expect(await this.ubi.period()).to.be.a.bignumber.that.equals(1)
+            expect(await this.ubi.period()).to.be.a.bignumber.that.equals(new BN(1))
         })
 
         describe("Non token holder", () => {
